@@ -12,9 +12,14 @@ const BLogtitle = asynchandler(async (req, res) => {
     }
 
     const genAI = new GoogleGenerativeAI(process.env.API_KEY);
-    const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
+    // Set the system instruction during model initialization
+    const model = genAI.getGenerativeModel({
+      model: "gemini-1.5-flash",
+      systemInstruction:
+        "Your task is to generate a compelling and accurate title for a blog post based on the text provided by the user. The user will supply the content of the blog, and you should analyze the main themes, key points, and overall message to create a title that captures the essence of the blog post. Ensure the title is engaging, concise, and relevant to the content",
+    });
 
-    const prompt = `Give me a short and crisp Title of this blog ${data}`;
+    const prompt = `${data}`;
     console.log(prompt);
 
     const result = await model.generateContent(prompt);
@@ -40,9 +45,13 @@ const BLogsummary = asynchandler(async (req, res) => {
     }
 
     const genAI = new GoogleGenerativeAI(process.env.API_KEY);
-    const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
+    const model = genAI.getGenerativeModel({
+      model: "gemini-1.5-flash",
+      systemInstruction:
+        "Your task is to generate a concise and informative summary of a blog post based on the text provided by the user. The user will supply the content of the blog, and you should distill the main points, key themes, and essential information into a brief summary. Ensure the summary is clear, coherent, and accurately reflects the content of the original blog post, capturing its essence in a few sentences",
+    });
 
-    const prompt = `Give me a short and crisp summary of this blog ${data}`;
+    const prompt = `${data}`;
     console.log(prompt);
 
     const result = await model.generateContent(prompt);
@@ -67,9 +76,13 @@ const Blogresult = asynchandler(async (req, res) => {
     }
 
     const genAI = new GoogleGenerativeAI(process.env.API_KEY);
-    const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
+    const model = genAI.getGenerativeModel({
+      model: "gemini-1.5-flash",
+      systemInstruction:
+        "Your task is to generate the moral or final outcome of a blog post based on the text provided by the user. The user will supply the content of the blog, and you should distill the key lessons, main conclusions, or ultimate takeaways into a few concise lines. Ensure the outcome is clear, coherent, and accurately reflects the core message of the original blog post.",
+    });
 
-    const prompt = `Give me in two lines about the outcome of this ${data}`;
+    const prompt = `${data}`;
     console.log(prompt);
 
     const result = await model.generateContent(prompt);
@@ -94,9 +107,13 @@ const converttopara = asynchandler(async (req, res) => {
     }
 
     const genAI = new GoogleGenerativeAI(process.env.API_KEY);
-    const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
+    const model = genAI.getGenerativeModel({
+      model: "gemini-1.5-flash",
+      systemInstruction:
+        "Your task is to organize and convert random content provided by the user into a coherent and well-structured paragraph. The user will supply the content in an unorganized format, and you should arrange the information logically, ensuring the paragraph is clear, cohesive, and flows naturally. Ensure the final paragraph accurately conveys the intended message of the original content.",
+    });
 
-    const prompt = `This is a summary you have to convert it into a paragraph and it begins from here  ${data}`;
+    const prompt = `${data}`;
     console.log(prompt);
 
     const result = await model.generateContent(prompt);
@@ -122,9 +139,13 @@ const promotionaldata = asynchandler(async (req, res) => {
     }
 
     const genAI = new GoogleGenerativeAI(process.env.API_KEY);
-    const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
+    const model = genAI.getGenerativeModel({
+      model: "gemini-1.5-flash",
+      systemInstruction:
+        "Your task is to create promotional and advertisement content based on the text provided by the user. The user will supply the content they wish to promote, and you should transform it into engaging and persuasive promotional material. Ensure the promotional content is compelling, clearly highlights the key benefits and features, and is suitable for use in advertisements.",
+    });
 
-    const prompt = `I am giving you a content and then you have to write a promotinal advertisment on that content and the content is ${data}`;
+    const prompt = `${data}`;
     console.log(prompt);
 
     const result = await model.generateContent(prompt);
@@ -150,9 +171,13 @@ const utubevuddes = asynchandler(async (req, res) => {
     }
 
     const genAI = new GoogleGenerativeAI(process.env.API_KEY);
-    const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
+    const model = genAI.getGenerativeModel({
+      model: "gemini-1.5-flash",
+      systemInstruction:
+        "Your task is to create engaging and relevant captions for YouTube videos based on the content provided by the user. The user will supply the video content, and you should generate a compelling caption that accurately reflects the video's message, attracts viewers, and encourages engagement. Ensure the caption is concise, catchy, and optimized for YouTube's audience and search algorithms",
+    });
 
-    const prompt = `I am giving you a video content and then you have to write captions for that video and that video will be going to upload on youtube so please give a good caption and the content is ${data}`;
+    const prompt =  `${data}`;
     console.log(prompt);
 
     const result = await model.generateContent(prompt);
@@ -178,9 +203,13 @@ const utubevuditle = asynchandler(async (req, res) => {
     }
 
     const genAI = new GoogleGenerativeAI(process.env.API_KEY);
-    const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
+    const model = genAI.getGenerativeModel({
+      model: "gemini-1.5-flash",
+      systemInstruction:
+        "Your task is to create an engaging and attention-grabbing title for a YouTube video based on the content provided by the user. The user will supply the video content, and you should generate a title that accurately reflects the video's theme, attracts viewers, and encourages clicks. Ensure the title is concise, relevant, and optimized for YouTube's audience and search algorithms",
+    });
 
-    const prompt = `Give me a good title for this youtube video content and the video content is ${data}`;
+    const prompt = `${data}`;
     console.log(prompt);
 
     const result = await model.generateContent(prompt);
@@ -206,9 +235,13 @@ const jobrole = asynchandler(async (req, res) => {
     }
 
     const genAI = new GoogleGenerativeAI(process.env.API_KEY);
-    const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
+    const model = genAI.getGenerativeModel({
+      model: "gemini-1.5-flash",
+      systemInstruction:
+        "Your task is to describe the role of a job based on the information provided by the user. The user will supply details about their job, and you should generate a clear and comprehensive description of the role. Ensure the description covers the main responsibilities, key tasks, and essential skills required for the job, providing an accurate and complete overview.",
+    });
 
-    const prompt = `Hey i am giving you knowledge about my job describe the role of my job and my job is ${data}`;
+    const prompt = `${data}`;
     console.log(prompt);
 
     const result = await model.generateContent(prompt);
@@ -234,9 +267,13 @@ const pcaption = asynchandler(async (req, res) => {
     }
 
     const genAI = new GoogleGenerativeAI(process.env.API_KEY);
-    const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
+    const model = genAI.getGenerativeModel({
+      model: "gemini-1.5-flash",
+      systemInstruction:
+        "Your task is to create an engaging and descriptive caption for an image based on the content provided by the user. The user will supply the details or context of the image, and you should generate a caption that accurately reflects the essence of the image, attracts viewers, and encourages engagement. Ensure the caption is concise, relevant, and captures the main theme or message of the image.",
+    });
 
-    const prompt = `Hey please give a caption for this image content and the content is ${data}`;
+    const prompt = `${data}`;
     console.log(prompt);
 
     const result = await model.generateContent(prompt);
@@ -261,9 +298,45 @@ const lipost = asynchandler(async (req, res) => {
     }
 
     const genAI = new GoogleGenerativeAI(process.env.API_KEY);
-    const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
+    const model = genAI.getGenerativeModel({
+      model: "gemini-1.5-flash",
+      systemInstruction:
+        "Your task is to create an engaging LinkedIn post caption based on the content provided by the user. The user will supply the post content, and you should generate a caption that accurately reflects the essence of the post, attracts viewers, and encourages engagement. Ensure the caption is concise, relevant, and includes appropriate emojis to enhance the message and appeal to LinkedIn's professional audience.",
+    });
 
-    const prompt = `hey please provide a linked in post captions about my post content and please use emojis and here my post content ${data}`;
+    const prompt = `${data}`;
+    console.log(prompt);
+
+    const result = await model.generateContent(prompt);
+    const response = await result.response;
+    const text = response.text();
+    console.log(text);
+    res.status(200).json(new ApiResponse(200, text, "Getting successfully"));
+  } catch (error) {
+    console.log(error);
+    return res.status(500).json({
+      message: `Having some error ${error}`,
+    });
+  }
+});
+
+const liprofileview = asynchandler(async (req, res) => {
+  try {
+    const { data } = req.body;
+    if (!data) {
+      return res.status(500).json({
+        message: `Having some error ${error}`,
+      });
+    }
+
+    const genAI = new GoogleGenerativeAI(process.env.API_KEY);
+    const model = genAI.getGenerativeModel({
+      model: "gemini-1.5-flash",
+      systemInstruction:
+        "Your task is to create a proficient and efficient profile description based on the user's provided skills and tech stacks. The user will supply information about their skills and technologies they are proficient in, and you should generate a comprehensive and polished profile description suitable for a resume. Ensure the description highlights the user's expertise, key strengths, and relevant experience in a clear and professional manner.",
+    });
+
+    const prompt = `${data}`;
     console.log(prompt);
 
     const result = await model.generateContent(prompt);
@@ -288,5 +361,6 @@ export {
   utubevuditle,
   jobrole,
   pcaption,
-  lipost
+  lipost,
+  liprofileview
 };
