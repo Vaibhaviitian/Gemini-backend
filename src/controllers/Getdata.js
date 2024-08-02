@@ -178,7 +178,7 @@ const utubevuddes = asynchandler(async (req, res) => {
         "Your task is to create engaging and relevant captions for YouTube videos based on the content provided by the user. The user will supply the video content, and you should generate a compelling caption that accurately reflects the video's message, attracts viewers, and encourages engagement. Ensure the caption is concise, catchy, and optimized for YouTube's audience and search algorithms",
     });
 
-    const prompt =  `${data}`;
+    const prompt = `${data}`;
     console.log(prompt);
 
     const result = await model.generateContent(prompt);
@@ -357,12 +357,13 @@ const imagetotext = asynchandler(async (req, res) => {
   try {
     console.log("rwjkvb");
     if (!req.files || !req.files.image || req.files.image.length === 0) {
-      return res.status(404).json({ message: 'Image is required' });
+      return res.status(404).json({ message: "Image is required" });
     }
     const genAI = new GoogleGenerativeAI(process.env.API_KEY);
     const model = genAI.getGenerativeModel({
       model: "gemini-1.5-pro",
-      systemInstruction: "Your task is to analyze the provided image and generate a textual description of its content. When a user provides an image, you should:Image Handling: Receive and process the image file. Ensure the image is correctly loaded and accessible for analysis.Image Analysis: Use image processing techniques or a pre-trained model to analyze the content of the image. This may involve recognizing objects, text, or other elements within the image.Generate Textual Description: Convert the findings from the image analysis into a coherent and descriptive text. The description should accurately represent the content of the image, including any identifiable objects, scenes, or text.Return Results: Provide the generated textual description in the response to the user. Ensure the description is clear, concise, and relevant to the image content",
+      systemInstruction:
+        "Your task is to analyze the provided image and generate a textual description of its content. When a user provides an image, you should:Image Handling: Receive and process the image file. Ensure the image is correctly loaded and accessible for analysis.Image Analysis: Use image processing techniques or a pre-trained model to analyze the content of the image. This may involve recognizing objects, text, or other elements within the image.Generate Textual Description: Convert the findings from the image analysis into a coherent and descriptive text. The description should accurately represent the content of the image, including any identifiable objects, scenes, or text.Return Results: Provide the generated textual description in the response to the user. Ensure the description is clear, concise, and relevant to the image content",
     });
 
     const imageFile = req.files.image[0];
@@ -378,18 +379,20 @@ const imagetotext = asynchandler(async (req, res) => {
       {
         fileData: {
           mimeType: uploadResponse.file.mimeType,
-          fileUri: uploadResponse.file.uri
-        }
+          fileUri: uploadResponse.file.uri,
+        },
       },
       { text: "Describe all thing about this image in text" },
     ]);
 
-    console.log(`Uploaded file ${uploadResponse.file.displayName} as: ${uploadResponse.file.uri}`);
+    console.log(
+      `Uploaded file ${uploadResponse.file.displayName} as: ${uploadResponse.file.uri}`
+    );
     const ans = `${result.response.text()}`;
 
-    return res.status(200).json(
-      new ApiResponse(200, ans, "Image text is coming")
-    );
+    return res
+      .status(200)
+      .json(new ApiResponse(200, ans, "Image text is coming"));
   } catch (error) {
     console.log(error);
     return res.status(500).json({
@@ -398,6 +401,37 @@ const imagetotext = asynchandler(async (req, res) => {
   }
 });
 
+const changetone = asynchandler(async (req, res) => {
+  try {
+    const { data } = req.body;
+    if (!data) {
+      return res.status(500).json({
+        message: `Having some error ${error}`,
+      });
+    }
+
+    const genAI = new GoogleGenerativeAI(process.env.API_KEY);
+    const model = genAI.getGenerativeModel({
+      model: "gemini-1.5-flash",
+      systemInstruction:
+        "Your task is to transform a given message into various tones based on user input. When a user provides a message and specifies a desired tone, such as 'angry,' 'smooth,' or 'merciful,' you should analyze the original message and adjust its tone accordingly. For an 'angry' tone, use strong and forceful language to convey frustration or urgency. For a 'smooth' tone, employ polite and reassuring language with a gentle flow. For a 'merciful' tone, incorporate compassionate and understanding language, focusing on empathy and forgiveness. Ensure that the modified message maintains its core meaning while aligning with the requested tone and provide the adapted message in your response.",
+    });
+
+    const prompt = `${data}`;
+    console.log(prompt);
+
+    const result = await model.generateContent(prompt);
+    const response = await result.response;
+    const text = response.text();
+    console.log(text);
+    res.status(200).json(new ApiResponse(200, text, "Getting successfully"));
+  } catch (error) {
+    console.log(error);
+    return res.status(500).json({
+      message: `Having some error ${error}`,
+    });
+  }
+});
 export {
   BLogtitle,
   BLogsummary,
@@ -410,5 +444,6 @@ export {
   pcaption,
   lipost,
   liprofileview,
-  imagetotext
+  imagetotext,
+  changetone,
 };

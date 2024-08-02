@@ -3,6 +3,7 @@ import {
   Blogresult,
   BLogsummary,
   BLogtitle,
+  changetone,
   converttopara,
   imagetotext,
   jobrole,
@@ -37,5 +38,6 @@ router.route("/api/v1/kol/imagetotext").post(
   ]),
   imagetotext
 );
+router.route("/api/v1/kol/changetone").post(changetone);
 
 export default router;
