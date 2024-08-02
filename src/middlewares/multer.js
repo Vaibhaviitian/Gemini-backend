@@ -12,15 +12,18 @@ if (!fs.existsSync(tempDir)) {
 }
 
 // Use path.resolve to get the absolute path
+console.log("Entered in multer");
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
     cb(null, tempDir);
   },
   filename: function (req, file, cb) {
-    cb(null, file.originalname); // Use original file name or generate a unique one
+    cb(null, file.originalname); 
   },
 });
+console.log(storage);
 
 const upload = multer({ storage });
+console.log(upload);
 
 export default upload;

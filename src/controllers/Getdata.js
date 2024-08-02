@@ -1,6 +1,7 @@
 import { GoogleGenerativeAI } from "@google/generative-ai";
 import asynchandler from "../utility/asynchandler.js";
 import ApiResponse from "../utility/Apiresponse.js";
+import { GoogleAIFileManager } from "@google/generative-ai/server";
 
 const BLogtitle = asynchandler(async (req, res) => {
   try {
@@ -351,6 +352,52 @@ const liprofileview = asynchandler(async (req, res) => {
     });
   }
 });
+
+const imagetotext = asynchandler(async (req, res) => {
+  try {
+    console.log("rwjkvb");
+    if (!req.files || !req.files.image || req.files.image.length === 0) {
+      return res.status(404).json({ message: 'Image is required' });
+    }
+    const genAI = new GoogleGenerativeAI(process.env.API_KEY);
+    const model = genAI.getGenerativeModel({
+      model: "gemini-1.5-pro",
+      systemInstruction: "Your task is to analyze the provided image and generate a textual description of its content. When a user provides an image, you should:Image Handling: Receive and process the image file. Ensure the image is correctly loaded and accessible for analysis.Image Analysis: Use image processing techniques or a pre-trained model to analyze the content of the image. This may involve recognizing objects, text, or other elements within the image.Generate Textual Description: Convert the findings from the image analysis into a coherent and descriptive text. The description should accurately represent the content of the image, including any identifiable objects, scenes, or text.Return Results: Provide the generated textual description in the response to the user. Ensure the description is clear, concise, and relevant to the image content",
+    });
+
+    const imageFile = req.files.image[0];
+    const imagePath = imageFile.path;
+    const imageName = imageFile.originalname;
+    const mimeType = imageFile.mimetype;
+    const fileManager = new GoogleAIFileManager(process.env.API_KEY);
+    const uploadResponse = await fileManager.uploadFile(imagePath, {
+      mimeType: mimeType,
+      displayName: imageName,
+    });
+    const result = await model.generateContent([
+      {
+        fileData: {
+          mimeType: uploadResponse.file.mimeType,
+          fileUri: uploadResponse.file.uri
+        }
+      },
+      { text: "Describe all thing about this image in text" },
+    ]);
+
+    console.log(`Uploaded file ${uploadResponse.file.displayName} as: ${uploadResponse.file.uri}`);
+    const ans = `${result.response.text()}`;
+
+    return res.status(200).json(
+      new ApiResponse(200, ans, "Image text is coming")
+    );
+  } catch (error) {
+    console.log(error);
+    return res.status(500).json({
+      message: `Having some error: ${error.message}`,
+    });
+  }
+});
+
 export {
   BLogtitle,
   BLogsummary,
@@ -362,5 +409,6 @@ export {
   jobrole,
   pcaption,
   lipost,
-  liprofileview
+  liprofileview,
+  imagetotext
 };
