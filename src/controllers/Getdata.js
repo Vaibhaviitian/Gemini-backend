@@ -3,18 +3,18 @@ import asynchandler from "../utility/asynchandler.js";
 import ApiResponse from "../utility/Apiresponse.js";
 import { GoogleAIFileManager } from "@google/generative-ai/server";
  
-import blogTitleRun from '../seo/blogTitle.js'
-import blogSummaryRun from '../seo/blogSummary.js'
-import blogResultRun from '../seo/blogResult.js'
+import blogTitleRun from '../gemini/blogTitle.js'
+import blogSummaryRun from '../gemini/blogSummary.js'
+import blogResultRun from '../gemini/blogResult.js'
 
-import convertToParaRun from '../seo/convertToPara.js'
-import jobRoleRun from '../seo/jobRole.js'
-import liPostRun from '../seo/liPost.js'
-import liProfileViewRun from '../seo/liProfileView.js'
-import pCaptionRun from '../seo/pCaption.js'
-import promotionalDataRun from "../seo/promotionalData.js";
-import utubeVedioRun from "../seo/utubeVedio.js";
-import utubeVedioTitleRun from "../seo/utubeVediotitle.js";
+import convertToParaRun from '../gemini/convertToPara.js'
+import jobRoleRun from '../gemini/jobRole.js'
+import liPostRun from '../gemini/liPost.js'
+import liProfileViewRun from '../gemini/liProfileView.js'
+import pCaptionRun from '../gemini/pCaption.js'
+import promotionalDataRun from "../gemini/promotionalData.js";
+import utubeVedioRun from "../gemini/utubeVedio.js";
+import utubeVedioTitleRun from "../gemini/utubeVediotitle.js";
 
 import blogTitleChatHistory from '../models/blogTitleChatHistory.js'
 
