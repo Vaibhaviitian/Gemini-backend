@@ -2,354 +2,359 @@ import { GoogleGenerativeAI } from "@google/generative-ai";
 import asynchandler from "../utility/asynchandler.js";
 import ApiResponse from "../utility/Apiresponse.js";
 import { GoogleAIFileManager } from "@google/generative-ai/server";
+ 
+import blogTitleRun from '../seo/blogTitle.js'
+import blogSummaryRun from '../seo/blogSummary.js'
+import blogResultRun from '../seo/blogResult.js'
+
+import convertToParaRun from '../seo/convertToPara.js'
+import jobRoleRun from '../seo/jobRole.js'
+import liPostRun from '../seo/liPost.js'
+import liProfileViewRun from '../seo/liProfileView.js'
+import pCaptionRun from '../seo/pCaption.js'
+import promotionalDataRun from "../seo/promotionalData.js";
+import utubeVedioRun from "../seo/utubeVedio.js";
+import utubeVedioTitleRun from "../seo/utubeVediotitle.js";
+
+import blogTitleChatHistory from '../models/blogTitleChatHistory.js'
+
+import blogSummaryChatHistory from '../models/blogSummaryChatHistory.js'
+
+  import blogResultChatHistory from '../models/blogResultChatHistory.js'
+import convertToParaChatHistory from "../models/convertToParaChatHistory.js";
+import jobRoleChatHistory from "../models/jobRoleChatHistory.js";
+import liPostChatHistory from "../models/lipostChatHistory.js";
+import liProfileViewhatHistory from "../models/liProfileViewChatHistory.js";
+import pCaptionChatHistory from "../models/pCaptioChatHistory.js";
+import promotionalDataChatHistory from "../models/promotionalDataChatHistory.js";
+import utubeVedioChatHistory from "../models/utubeVedioChatHistory.js";
+import utubeVedioTitleChatHistory from "../models/utubeVedioTitleChatHistory.js";
+
 
 const BLogtitle = asynchandler(async (req, res) => {
   try {
-    const { data } = req.body;
-    if (!data) {
-      return res.status(500).json({
-        message: `Having some error ${error}`,
+    const { userId, prompt } = req.body;
+
+    const chatHistory = await blogTitleChatHistory.findOne({ userId });
+    const previousChats = chatHistory ? chatHistory.chats.flatMap(chat => [
+      { role: "user", text: chat.prompt },
+      { role: "model", text: chat.response }
+    ]) : [];
+
+    const response = await blogTitleRun(prompt, previousChats);
+
+    if (chatHistory) {
+      chatHistory.chats.push({ prompt, response });
+      await chatHistory.save();
+    } else {
+      const newChatHistory = new blogTitleChatHistory({
+        userId,
+        chats: [{ prompt, response }],
       });
+      await newChatHistory.save();
     }
 
-    const genAI = new GoogleGenerativeAI(process.env.API_KEY);
-    // Set the system instruction during model initialization
-    const model = genAI.getGenerativeModel({
-      model: "gemini-1.5-flash",
-      systemInstruction:
-        "Your task is to generate a compelling and accurate title for a blog post based on the text provided by the user. The user will supply the content of the blog, and you should analyze the main themes, key points, and overall message to create a title that captures the essence of the blog post. Ensure the title is engaging, concise, and relevant to the content",
-    });
-
-    const prompt = `${data}`;
-    console.log(prompt);
-
-    const result = await model.generateContent(prompt);
-    const response = await result.response;
-    const text = response.text();
-    console.log(text);
-    res.status(200).json(new ApiResponse(200, text, "Getting successfully"));
+    res.json(response);
   } catch (error) {
     console.log(error);
-    return res.status(500).json({
-      message: `Having some error ${error}`,
-    });
+    res.status(500).send('An error occurred while generating the response.');
   }
 });
 
 const BLogsummary = asynchandler(async (req, res) => {
-  try {
-    const { data } = req.body;
-    if (!data) {
-      return res.status(500).json({
-        message: `Having some error ${error}`,
+ try {
+    const { userId, prompt } = req.body;
+
+    const chatHistory = await blogSummaryChatHistory.findOne({ userId });
+    const previousChats = chatHistory ? chatHistory.chats.flatMap(chat => [
+      { role: "user", text: chat.prompt },
+      { role: "model", text: chat.response }
+    ]) : [];
+
+    const response = await blogSummaryRun(prompt, previousChats);
+
+    if (chatHistory) {
+      chatHistory.chats.push({ prompt, response });
+      await chatHistory.save();
+    } else {
+      const newChatHistory = new blogSummaryChatHistory({
+        userId,
+        chats: [{ prompt, response }],
       });
+      await newChatHistory.save();
     }
 
-    const genAI = new GoogleGenerativeAI(process.env.API_KEY);
-    const model = genAI.getGenerativeModel({
-      model: "gemini-1.5-flash",
-      systemInstruction:
-        "Your task is to generate a concise and informative summary of a blog post based on the text provided by the user. The user will supply the content of the blog, and you should distill the main points, key themes, and essential information into a brief summary. Ensure the summary is clear, coherent, and accurately reflects the content of the original blog post, capturing its essence in a few sentences",
-    });
-
-    const prompt = `${data}`;
-    console.log(prompt);
-
-    const result = await model.generateContent(prompt);
-    const response = await result.response;
-    const text = response.text();
-    console.log(text);
-    res.status(200).json(new ApiResponse(200, text, "Getting successfully"));
+    res.json(response);
   } catch (error) {
     console.log(error);
-    return res.status(500).json({
-      message: `Having some error ${error}`,
-    });
+    res.status(500).send('An error occurred while generating the response.');
   }
 });
 const Blogresult = asynchandler(async (req, res) => {
   try {
-    const { data } = req.body;
-    if (!data) {
-      return res.status(500).json({
-        message: `Having some error ${error}`,
+    const { userId, prompt } = req.body;
+
+    const chatHistory = await blogResultChatHistory.findOne({ userId });
+    const previousChats = chatHistory ? chatHistory.chats.flatMap(chat => [
+      { role: "user", text: chat.prompt },
+      { role: "model", text: chat.response }
+    ]) : [];
+
+    const response = await blogResultRun(prompt, previousChats);
+
+    if (chatHistory) {
+      chatHistory.chats.push({ prompt, response });
+      await chatHistory.save();
+    } else {
+      const newChatHistory = new blogResultChatHistory({
+        userId,
+        chats: [{ prompt, response }],
       });
+      await newChatHistory.save();
     }
 
-    const genAI = new GoogleGenerativeAI(process.env.API_KEY);
-    const model = genAI.getGenerativeModel({
-      model: "gemini-1.5-flash",
-      systemInstruction:
-        "Your task is to generate the moral or final outcome of a blog post based on the text provided by the user. The user will supply the content of the blog, and you should distill the key lessons, main conclusions, or ultimate takeaways into a few concise lines. Ensure the outcome is clear, coherent, and accurately reflects the core message of the original blog post.",
-    });
-
-    const prompt = `${data}`;
-    console.log(prompt);
-
-    const result = await model.generateContent(prompt);
-    const response = await result.response;
-    const text = response.text();
-    console.log(text);
-    res.status(200).json(new ApiResponse(200, text, "Getting successfully"));
+    res.json(response);
   } catch (error) {
     console.log(error);
-    return res.status(500).json({
-      message: `Having some error ${error}`,
-    });
+    res.status(500).send('An error occurred while generating the response.');
   }
 });
 const converttopara = asynchandler(async (req, res) => {
   try {
-    const { data } = req.body;
-    if (!data) {
-      return res.status(500).json({
-        message: `Having some error ${error}`,
+    const { userId, prompt } = req.body;
+
+    const chatHistory = await convertToParaChatHistory.findOne({ userId });
+    const previousChats = chatHistory ? chatHistory.chats.flatMap(chat => [
+      { role: "user", text: chat.prompt },
+      { role: "model", text: chat.response }
+    ]) : [];
+
+    const response = await convertToParaRun(prompt, previousChats);
+
+    if (chatHistory) {
+      chatHistory.chats.push({ prompt, response });
+      await chatHistory.save();
+    } else {
+      const newChatHistory = new convertToParaChatHistory({
+        userId,
+        chats: [{ prompt, response }],
       });
+      await newChatHistory.save();
     }
 
-    const genAI = new GoogleGenerativeAI(process.env.API_KEY);
-    const model = genAI.getGenerativeModel({
-      model: "gemini-1.5-flash",
-      systemInstruction:
-        "Your task is to organize and convert random content provided by the user into a coherent and well-structured paragraph. The user will supply the content in an unorganized format, and you should arrange the information logically, ensuring the paragraph is clear, cohesive, and flows naturally. Ensure the final paragraph accurately conveys the intended message of the original content.",
-    });
-
-    const prompt = `${data}`;
-    console.log(prompt);
-
-    const result = await model.generateContent(prompt);
-    const response = await result.response;
-    const text = response.text();
-    console.log(text);
-    res.status(200).json(new ApiResponse(200, text, "Getting successfully"));
+    res.json(response);
   } catch (error) {
     console.log(error);
-    return res.status(500).json({
-      message: `Having some error ${error}`,
-    });
+    res.status(500).send('An error occurred while generating the response.');
   }
 });
 
 const promotionaldata = asynchandler(async (req, res) => {
   try {
-    const { data } = req.body;
-    if (!data) {
-      return res.status(500).json({
-        message: `Having some error ${error}`,
+    const { userId, prompt } = req.body;
+
+    const chatHistory = await promotionalDataChatHistory.findOne({ userId });
+    const previousChats = chatHistory ? chatHistory.chats.flatMap(chat => [
+      { role: "user", text: chat.prompt },
+      { role: "model", text: chat.response }
+    ]) : [];
+
+    const response = await promotionalDataRun(prompt, previousChats);
+
+    if (chatHistory) {
+      chatHistory.chats.push({ prompt, response });
+      await chatHistory.save();
+    } else {
+      const newChatHistory = new promotionalDataChatHistory({
+        userId,
+        chats: [{ prompt, response }],
       });
+      await newChatHistory.save();
     }
 
-    const genAI = new GoogleGenerativeAI(process.env.API_KEY);
-    const model = genAI.getGenerativeModel({
-      model: "gemini-1.5-flash",
-      systemInstruction:
-        "Your task is to create promotional and advertisement content based on the text provided by the user. The user will supply the content they wish to promote, and you should transform it into engaging and persuasive promotional material. Ensure the promotional content is compelling, clearly highlights the key benefits and features, and is suitable for use in advertisements.",
-    });
-
-    const prompt = `${data}`;
-    console.log(prompt);
-
-    const result = await model.generateContent(prompt);
-    const response = await result.response;
-    const text = response.text();
-    console.log(text);
-    res.status(200).json(new ApiResponse(200, text, "Getting successfully"));
+    res.json(response);
   } catch (error) {
     console.log(error);
-    return res.status(500).json({
-      message: `Having some error ${error}`,
-    });
+    res.status(500).send('An error occurred while generating the response.');
   }
 });
 
 const utubevuddes = asynchandler(async (req, res) => {
-  try {
-    const { data } = req.body;
-    if (!data) {
-      return res.status(500).json({
-        message: `Having some error ${error}`,
+ try {
+    const { userId, prompt } = req.body;
+
+    const chatHistory = await utubeVedioChatHistory.findOne({ userId });
+    const previousChats = chatHistory ? chatHistory.chats.flatMap(chat => [
+      { role: "user", text: chat.prompt },
+      { role: "model", text: chat.response }
+    ]) : [];
+
+    const response = await utubeVedioRun(prompt, previousChats);
+
+    if (chatHistory) {
+      chatHistory.chats.push({ prompt, response });
+      await chatHistory.save();
+    } else {
+      const newChatHistory = new utubeVedioChatHistory({
+        userId,
+        chats: [{ prompt, response }],
       });
+      await newChatHistory.save();
     }
 
-    const genAI = new GoogleGenerativeAI(process.env.API_KEY);
-    const model = genAI.getGenerativeModel({
-      model: "gemini-1.5-flash",
-      systemInstruction:
-        "Your task is to create engaging and relevant captions for YouTube videos based on the content provided by the user. The user will supply the video content, and you should generate a compelling caption that accurately reflects the video's message, attracts viewers, and encourages engagement. Ensure the caption is concise, catchy, and optimized for YouTube's audience and search algorithms",
-    });
-
-    const prompt = `${data}`;
-    console.log(prompt);
-
-    const result = await model.generateContent(prompt);
-    const response = await result.response;
-    const text = response.text();
-    console.log(text);
-    res.status(200).json(new ApiResponse(200, text, "Getting successfully"));
+    res.json(response);
   } catch (error) {
     console.log(error);
-    return res.status(500).json({
-      message: `Having some error ${error}`,
-    });
+    res.status(500).send('An error occurred while generating the response.');
   }
 });
 
 const utubevuditle = asynchandler(async (req, res) => {
   try {
-    const { data } = req.body;
-    if (!data) {
-      return res.status(500).json({
-        message: `Having some error ${error}`,
+    const { userId, prompt } = req.body;
+
+    const chatHistory = await utubeVedioTitleChatHistory.findOne({ userId });
+    const previousChats = chatHistory ? chatHistory.chats.flatMap(chat => [
+      { role: "user", text: chat.prompt },
+      { role: "model", text: chat.response }
+    ]) : [];
+
+    const response = await utubeVedioTitleRun(prompt, previousChats);
+
+    if (chatHistory) {
+      chatHistory.chats.push({ prompt, response });
+      await chatHistory.save();
+    } else {
+      const newChatHistory = new utubeVedioTitleChatHistory({
+        userId,
+        chats: [{ prompt, response }],
       });
+      await newChatHistory.save();
     }
 
-    const genAI = new GoogleGenerativeAI(process.env.API_KEY);
-    const model = genAI.getGenerativeModel({
-      model: "gemini-1.5-flash",
-      systemInstruction:
-        "Your task is to create an engaging and attention-grabbing title for a YouTube video based on the content provided by the user. The user will supply the video content, and you should generate a title that accurately reflects the video's theme, attracts viewers, and encourages clicks. Ensure the title is concise, relevant, and optimized for YouTube's audience and search algorithms",
-    });
-
-    const prompt = `${data}`;
-    console.log(prompt);
-
-    const result = await model.generateContent(prompt);
-    const response = await result.response;
-    const text = response.text();
-    console.log(text);
-    res.status(200).json(new ApiResponse(200, text, "Getting successfully"));
+    res.json(response);
   } catch (error) {
     console.log(error);
-    return res.status(500).json({
-      message: `Having some error ${error}`,
-    });
+    res.status(500).send('An error occurred while generating the response.');
   }
 });
 
 const jobrole = asynchandler(async (req, res) => {
   try {
-    const { data } = req.body;
-    if (!data) {
-      return res.status(500).json({
-        message: `Having some error ${error}`,
+    const { userId, prompt } = req.body;
+
+    const chatHistory = await jobRoleChatHistory.findOne({ userId });
+    const previousChats = chatHistory ? chatHistory.chats.flatMap(chat => [
+      { role: "user", text: chat.prompt },
+      { role: "model", text: chat.response }
+    ]) : [];
+
+    const response = await jobRoleRun(prompt, previousChats);
+
+    if (chatHistory) {
+      chatHistory.chats.push({ prompt, response });
+      await chatHistory.save();
+    } else {
+      const newChatHistory = new jobRoleChatHistory({
+        userId,
+        chats: [{ prompt, response }],
       });
+      await newChatHistory.save();
     }
 
-    const genAI = new GoogleGenerativeAI(process.env.API_KEY);
-    const model = genAI.getGenerativeModel({
-      model: "gemini-1.5-flash",
-      systemInstruction:
-        "Your task is to describe the role of a job based on the information provided by the user. The user will supply details about their job, and you should generate a clear and comprehensive description of the role. Ensure the description covers the main responsibilities, key tasks, and essential skills required for the job, providing an accurate and complete overview.",
-    });
-
-    const prompt = `${data}`;
-    console.log(prompt);
-
-    const result = await model.generateContent(prompt);
-    const response = await result.response;
-    const text = response.text();
-    console.log(text);
-    res.status(200).json(new ApiResponse(200, text, "Getting successfully"));
+    res.json(response);
   } catch (error) {
     console.log(error);
-    return res.status(500).json({
-      message: `Having some error ${error}`,
-    });
+    res.status(500).send('An error occurred while generating the response.');
   }
 });
 
 const pcaption = asynchandler(async (req, res) => {
-  try {
-    const { data } = req.body;
-    if (!data) {
-      return res.status(500).json({
-        message: `Having some error ${error}`,
+ try {
+    const { userId, prompt } = req.body;
+
+    const chatHistory = await pCaptionChatHistory.findOne({ userId });
+    const previousChats = chatHistory ? chatHistory.chats.flatMap(chat => [
+      { role: "user", text: chat.prompt },
+      { role: "model", text: chat.response }
+    ]) : [];
+
+    const response = await pCaptionRun(prompt, previousChats);
+
+    if (chatHistory) {
+      chatHistory.chats.push({ prompt, response });
+      await chatHistory.save();
+    } else {
+      const newChatHistory = new pCaptionChatHistory({
+        userId,
+        chats: [{ prompt, response }],
       });
+      await newChatHistory.save();
     }
 
-    const genAI = new GoogleGenerativeAI(process.env.API_KEY);
-    const model = genAI.getGenerativeModel({
-      model: "gemini-1.5-flash",
-      systemInstruction:
-        "Your task is to create an engaging and descriptive caption for an image based on the content provided by the user. The user will supply the details or context of the image, and you should generate a caption that accurately reflects the essence of the image, attracts viewers, and encourages engagement. Ensure the caption is concise, relevant, and captures the main theme or message of the image.",
-    });
-
-    const prompt = `${data}`;
-    console.log(prompt);
-
-    const result = await model.generateContent(prompt);
-    const response = await result.response;
-    const text = response.text();
-    console.log(text);
-    res.status(200).json(new ApiResponse(200, text, "Getting successfully"));
+    res.json(response);
   } catch (error) {
     console.log(error);
-    return res.status(500).json({
-      message: `Having some error ${error}`,
-    });
+    res.status(500).send('An error occurred while generating the response.');
   }
 });
 const lipost = asynchandler(async (req, res) => {
   try {
-    const { data } = req.body;
-    if (!data) {
-      return res.status(500).json({
-        message: `Having some error ${error}`,
+    const { userId, prompt } = req.body;
+
+    const chatHistory = await liPostChatHistory.findOne({ userId });
+    const previousChats = chatHistory ? chatHistory.chats.flatMap(chat => [
+      { role: "user", text: chat.prompt },
+      { role: "model", text: chat.response }
+    ]) : [];
+
+    const response = await liPostRun(prompt, previousChats);
+
+    if (chatHistory) {
+      chatHistory.chats.push({ prompt, response });
+      await chatHistory.save();
+    } else {
+      const newChatHistory = new liPostChatHistory({
+        userId,
+        chats: [{ prompt, response }],
       });
+      await newChatHistory.save();
     }
 
-    const genAI = new GoogleGenerativeAI(process.env.API_KEY);
-    const model = genAI.getGenerativeModel({
-      model: "gemini-1.5-flash",
-      systemInstruction:
-        "Your task is to create an engaging LinkedIn post caption based on the content provided by the user. The user will supply the post content, and you should generate a caption that accurately reflects the essence of the post, attracts viewers, and encourages engagement. Ensure the caption is concise, relevant, and includes appropriate emojis to enhance the message and appeal to LinkedIn's professional audience.",
-    });
-
-    const prompt = `${data}`;
-    console.log(prompt);
-
-    const result = await model.generateContent(prompt);
-    const response = await result.response;
-    const text = response.text();
-    console.log(text);
-    res.status(200).json(new ApiResponse(200, text, "Getting successfully"));
+    res.json(response);
   } catch (error) {
     console.log(error);
-    return res.status(500).json({
-      message: `Having some error ${error}`,
-    });
+    res.status(500).send('An error occurred while generating the response.');
   }
 });
 
 const liprofileview = asynchandler(async (req, res) => {
   try {
-    const { data } = req.body;
-    if (!data) {
-      return res.status(500).json({
-        message: `Having some error ${error}`,
+    const { userId, prompt } = req.body;
+
+    const chatHistory = await liProfileViewhatHistory.findOne({ userId });
+    const previousChats = chatHistory ? chatHistory.chats.flatMap(chat => [
+      { role: "user", text: chat.prompt },
+      { role: "model", text: chat.response }
+    ]) : [];
+
+    const response = await liProfileViewRun(prompt, previousChats);
+
+    if (chatHistory) {
+      chatHistory.chats.push({ prompt, response });
+      await chatHistory.save();
+    } else {
+      const newChatHistory = new liProfileViewhatHistory({
+        userId,
+        chats: [{ prompt, response }],
       });
+      await newChatHistory.save();
     }
 
-    const genAI = new GoogleGenerativeAI(process.env.API_KEY);
-    const model = genAI.getGenerativeModel({
-      model: "gemini-1.5-flash",
-      systemInstruction:
-        "Your task is to create a proficient and efficient profile description based on the user's provided skills and tech stacks. The user will supply information about their skills and technologies they are proficient in, and you should generate a comprehensive and polished profile description suitable for a resume. Ensure the description highlights the user's expertise, key strengths, and relevant experience in a clear and professional manner.",
-    });
-
-    const prompt = `${data}`;
-    console.log(prompt);
-
-    const result = await model.generateContent(prompt);
-    const response = await result.response;
-    const text = response.text();
-    console.log(text);
-    res.status(200).json(new ApiResponse(200, text, "Getting successfully"));
+    res.json(response);
   } catch (error) {
     console.log(error);
-    return res.status(500).json({
-      message: `Having some error ${error}`,
-    });
+    res.status(500).send('An error occurred while generating the response.');
   }
 });
 
