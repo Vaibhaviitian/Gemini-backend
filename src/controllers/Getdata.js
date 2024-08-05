@@ -34,7 +34,6 @@ import utubeVedioTitleChatHistory from "../models/utubeVedioTitleChatHistory.js"
 const BLogtitle = asynchandler(async (req, res) => {
   try {
     const { userId, prompt } = req.body;
-
     const chatHistory = await blogTitleChatHistory.findOne({ userId });
     const previousChats = chatHistory ? chatHistory.chats.flatMap(chat => [
       { role: "user", text: chat.prompt },
@@ -54,7 +53,9 @@ const BLogtitle = asynchandler(async (req, res) => {
       await newChatHistory.save();
     }
 
-    res.json(response);
+    res.json({
+      data:response
+    });
   } catch (error) {
     console.log(error);
     res.status(500).send('An error occurred while generating the response.');
