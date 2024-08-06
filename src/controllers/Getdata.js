@@ -2,25 +2,25 @@ import { GoogleGenerativeAI } from "@google/generative-ai";
 import asynchandler from "../utility/asynchandler.js";
 import ApiResponse from "../utility/Apiresponse.js";
 import { GoogleAIFileManager } from "@google/generative-ai/server";
- 
-import blogTitleRun from '../gemini/blogTitle.js'
-import blogSummaryRun from '../gemini/blogSummary.js'
-import blogResultRun from '../gemini/blogResult.js'
 
-import convertToParaRun from '../gemini/convertToPara.js'
-import jobRoleRun from '../gemini/jobRole.js'
-import liPostRun from '../gemini/liPost.js'
-import liProfileViewRun from '../gemini/liProfileView.js'
-import pCaptionRun from '../gemini/pCaption.js'
+import blogTitleRun from "../gemini/blogTitle.js";
+import blogSummaryRun from "../gemini/blogSummary.js";
+import blogResultRun from "../gemini/blogResult.js";
+
+import convertToParaRun from "../gemini/convertToPara.js";
+import jobRoleRun from "../gemini/jobRole.js";
+import liPostRun from "../gemini/liPost.js";
+import liProfileViewRun from "../gemini/liProfileView.js";
+import pCaptionRun from "../gemini/pCaption.js";
 import promotionalDataRun from "../gemini/promotionalData.js";
 import utubeVedioRun from "../gemini/utubeVedio.js";
 import utubeVedioTitleRun from "../gemini/utubeVediotitle.js";
 
-import blogTitleChatHistory from '../models/blogTitleChatHistory.js'
+import blogTitleChatHistory from "../models/blogTitleChatHistory.js";
 
-import blogSummaryChatHistory from '../models/blogSummaryChatHistory.js'
+import blogSummaryChatHistory from "../models/blogSummaryChatHistory.js";
 
-  import blogResultChatHistory from '../models/blogResultChatHistory.js'
+import blogResultChatHistory from "../models/blogResultChatHistory.js";
 import convertToParaChatHistory from "../models/convertToParaChatHistory.js";
 import jobRoleChatHistory from "../models/jobRoleChatHistory.js";
 import liPostChatHistory from "../models/lipostChatHistory.js";
@@ -30,15 +30,16 @@ import promotionalDataChatHistory from "../models/promotionalDataChatHistory.js"
 import utubeVedioChatHistory from "../models/utubeVedioChatHistory.js";
 import utubeVedioTitleChatHistory from "../models/utubeVedioTitleChatHistory.js";
 
-
 const BLogtitle = asynchandler(async (req, res) => {
   try {
     const { userId, prompt } = req.body;
     const chatHistory = await blogTitleChatHistory.findOne({ userId });
-    const previousChats = chatHistory ? chatHistory.chats.flatMap(chat => [
-      { role: "user", text: chat.prompt },
-      { role: "model", text: chat.response }
-    ]) : [];
+    const previousChats = chatHistory
+      ? chatHistory.chats.flatMap((chat) => [
+          { role: "user", text: chat.prompt },
+          { role: "model", text: chat.response },
+        ])
+      : [];
 
     const response = await blogTitleRun(prompt, previousChats);
 
@@ -54,23 +55,27 @@ const BLogtitle = asynchandler(async (req, res) => {
     }
 
     res.json({
-      data:response
+      data: response,
     });
   } catch (error) {
     console.log(error);
-    res.status(500).send('An error occurred while generating the response.');
+    res
+      .status(500)
+      .json({ message: `An error occurred while generating the response. ${error}` });
   }
 });
 
 const BLogsummary = asynchandler(async (req, res) => {
- try {
+  try {
     const { userId, prompt } = req.body;
 
     const chatHistory = await blogSummaryChatHistory.findOne({ userId });
-    const previousChats = chatHistory ? chatHistory.chats.flatMap(chat => [
-      { role: "user", text: chat.prompt },
-      { role: "model", text: chat.response }
-    ]) : [];
+    const previousChats = chatHistory
+      ? chatHistory.chats.flatMap((chat) => [
+          { role: "user", text: chat.prompt },
+          { role: "model", text: chat.response },
+        ])
+      : [];
 
     const response = await blogSummaryRun(prompt, previousChats);
 
@@ -85,10 +90,14 @@ const BLogsummary = asynchandler(async (req, res) => {
       await newChatHistory.save();
     }
 
-    res.json(response);
+    res.json({
+      data: response,
+    });
   } catch (error) {
     console.log(error);
-    res.status(500).send('An error occurred while generating the response.');
+    res
+      .status(500)
+      .json({ message: `An error occurred while generating the response. ${error}` });
   }
 });
 const Blogresult = asynchandler(async (req, res) => {
@@ -96,10 +105,12 @@ const Blogresult = asynchandler(async (req, res) => {
     const { userId, prompt } = req.body;
 
     const chatHistory = await blogResultChatHistory.findOne({ userId });
-    const previousChats = chatHistory ? chatHistory.chats.flatMap(chat => [
-      { role: "user", text: chat.prompt },
-      { role: "model", text: chat.response }
-    ]) : [];
+    const previousChats = chatHistory
+      ? chatHistory.chats.flatMap((chat) => [
+          { role: "user", text: chat.prompt },
+          { role: "model", text: chat.response },
+        ])
+      : [];
 
     const response = await blogResultRun(prompt, previousChats);
 
@@ -114,10 +125,14 @@ const Blogresult = asynchandler(async (req, res) => {
       await newChatHistory.save();
     }
 
-    res.json(response);
+    res.json({
+      data: response,
+    });
   } catch (error) {
     console.log(error);
-    res.status(500).send('An error occurred while generating the response.');
+    res
+      .status(500)
+      .json({ message: `An error occurred while generating the response. ${error}` });
   }
 });
 const converttopara = asynchandler(async (req, res) => {
@@ -125,10 +140,12 @@ const converttopara = asynchandler(async (req, res) => {
     const { userId, prompt } = req.body;
 
     const chatHistory = await convertToParaChatHistory.findOne({ userId });
-    const previousChats = chatHistory ? chatHistory.chats.flatMap(chat => [
-      { role: "user", text: chat.prompt },
-      { role: "model", text: chat.response }
-    ]) : [];
+    const previousChats = chatHistory
+      ? chatHistory.chats.flatMap((chat) => [
+          { role: "user", text: chat.prompt },
+          { role: "model", text: chat.response },
+        ])
+      : [];
 
     const response = await convertToParaRun(prompt, previousChats);
 
@@ -143,10 +160,14 @@ const converttopara = asynchandler(async (req, res) => {
       await newChatHistory.save();
     }
 
-    res.json(response);
+    res.json({
+      data: response,
+    });
   } catch (error) {
     console.log(error);
-    res.status(500).send('An error occurred while generating the response.');
+    res
+      .status(500)
+      .json({ message: `An error occurred while generating the response. ${error}` });
   }
 });
 
@@ -155,10 +176,12 @@ const promotionaldata = asynchandler(async (req, res) => {
     const { userId, prompt } = req.body;
 
     const chatHistory = await promotionalDataChatHistory.findOne({ userId });
-    const previousChats = chatHistory ? chatHistory.chats.flatMap(chat => [
-      { role: "user", text: chat.prompt },
-      { role: "model", text: chat.response }
-    ]) : [];
+    const previousChats = chatHistory
+      ? chatHistory.chats.flatMap((chat) => [
+          { role: "user", text: chat.prompt },
+          { role: "model", text: chat.response },
+        ])
+      : [];
 
     const response = await promotionalDataRun(prompt, previousChats);
 
@@ -173,22 +196,28 @@ const promotionaldata = asynchandler(async (req, res) => {
       await newChatHistory.save();
     }
 
-    res.json(response);
+    res.json({
+      data: response,
+    });
   } catch (error) {
     console.log(error);
-    res.status(500).send('An error occurred while generating the response.');
+    res
+      .status(500)
+      .json({ message: `An error occurred while generating the response. ${error}` });
   }
 });
 
 const utubevuddes = asynchandler(async (req, res) => {
- try {
+  try {
     const { userId, prompt } = req.body;
 
     const chatHistory = await utubeVedioChatHistory.findOne({ userId });
-    const previousChats = chatHistory ? chatHistory.chats.flatMap(chat => [
-      { role: "user", text: chat.prompt },
-      { role: "model", text: chat.response }
-    ]) : [];
+    const previousChats = chatHistory
+      ? chatHistory.chats.flatMap((chat) => [
+          { role: "user", text: chat.prompt },
+          { role: "model", text: chat.response },
+        ])
+      : [];
 
     const response = await utubeVedioRun(prompt, previousChats);
 
@@ -203,10 +232,14 @@ const utubevuddes = asynchandler(async (req, res) => {
       await newChatHistory.save();
     }
 
-    res.json(response);
+    res.json({
+      data: response,
+    });
   } catch (error) {
     console.log(error);
-    res.status(500).send('An error occurred while generating the response.');
+    res
+      .status(500)
+      .json({ message: `An error occurred while generating the response. ${error}` });
   }
 });
 
@@ -215,10 +248,12 @@ const utubevuditle = asynchandler(async (req, res) => {
     const { userId, prompt } = req.body;
 
     const chatHistory = await utubeVedioTitleChatHistory.findOne({ userId });
-    const previousChats = chatHistory ? chatHistory.chats.flatMap(chat => [
-      { role: "user", text: chat.prompt },
-      { role: "model", text: chat.response }
-    ]) : [];
+    const previousChats = chatHistory
+      ? chatHistory.chats.flatMap((chat) => [
+          { role: "user", text: chat.prompt },
+          { role: "model", text: chat.response },
+        ])
+      : [];
 
     const response = await utubeVedioTitleRun(prompt, previousChats);
 
@@ -233,10 +268,14 @@ const utubevuditle = asynchandler(async (req, res) => {
       await newChatHistory.save();
     }
 
-    res.json(response);
+    res.json({
+      data: response,
+    });
   } catch (error) {
     console.log(error);
-    res.status(500).send('An error occurred while generating the response.');
+    res
+      .status(500)
+      .json({ message: `An error occurred while generating the response. ${error}` });
   }
 });
 
@@ -245,10 +284,12 @@ const jobrole = asynchandler(async (req, res) => {
     const { userId, prompt } = req.body;
 
     const chatHistory = await jobRoleChatHistory.findOne({ userId });
-    const previousChats = chatHistory ? chatHistory.chats.flatMap(chat => [
-      { role: "user", text: chat.prompt },
-      { role: "model", text: chat.response }
-    ]) : [];
+    const previousChats = chatHistory
+      ? chatHistory.chats.flatMap((chat) => [
+          { role: "user", text: chat.prompt },
+          { role: "model", text: chat.response },
+        ])
+      : [];
 
     const response = await jobRoleRun(prompt, previousChats);
 
@@ -263,22 +304,28 @@ const jobrole = asynchandler(async (req, res) => {
       await newChatHistory.save();
     }
 
-    res.json(response);
+    res.json({
+      data: response,
+    });
   } catch (error) {
     console.log(error);
-    res.status(500).send('An error occurred while generating the response.');
+    res
+      .status(500)
+      .json({ message: `An error occurred while generating the response. ${error}` });
   }
 });
 
 const pcaption = asynchandler(async (req, res) => {
- try {
+  try {
     const { userId, prompt } = req.body;
 
     const chatHistory = await pCaptionChatHistory.findOne({ userId });
-    const previousChats = chatHistory ? chatHistory.chats.flatMap(chat => [
-      { role: "user", text: chat.prompt },
-      { role: "model", text: chat.response }
-    ]) : [];
+    const previousChats = chatHistory
+      ? chatHistory.chats.flatMap((chat) => [
+          { role: "user", text: chat.prompt },
+          { role: "model", text: chat.response },
+        ])
+      : [];
 
     const response = await pCaptionRun(prompt, previousChats);
 
@@ -293,10 +340,14 @@ const pcaption = asynchandler(async (req, res) => {
       await newChatHistory.save();
     }
 
-    res.json(response);
+    res.json({
+      data: response,
+    });
   } catch (error) {
     console.log(error);
-    res.status(500).send('An error occurred while generating the response.');
+    res
+      .status(500)
+      .json({ message: `An error occurred while generating the response. ${error}` });
   }
 });
 const lipost = asynchandler(async (req, res) => {
@@ -304,10 +355,12 @@ const lipost = asynchandler(async (req, res) => {
     const { userId, prompt } = req.body;
 
     const chatHistory = await liPostChatHistory.findOne({ userId });
-    const previousChats = chatHistory ? chatHistory.chats.flatMap(chat => [
-      { role: "user", text: chat.prompt },
-      { role: "model", text: chat.response }
-    ]) : [];
+    const previousChats = chatHistory
+      ? chatHistory.chats.flatMap((chat) => [
+          { role: "user", text: chat.prompt },
+          { role: "model", text: chat.response },
+        ])
+      : [];
 
     const response = await liPostRun(prompt, previousChats);
 
@@ -322,10 +375,14 @@ const lipost = asynchandler(async (req, res) => {
       await newChatHistory.save();
     }
 
-    res.json(response);
+    res.json({
+      data: response,
+    });
   } catch (error) {
     console.log(error);
-    res.status(500).send('An error occurred while generating the response.');
+    res
+      .status(500)
+      .json({ message: `An error occurred while generating the response. ${error}` });
   }
 });
 
@@ -334,10 +391,12 @@ const liprofileview = asynchandler(async (req, res) => {
     const { userId, prompt } = req.body;
 
     const chatHistory = await liProfileViewhatHistory.findOne({ userId });
-    const previousChats = chatHistory ? chatHistory.chats.flatMap(chat => [
-      { role: "user", text: chat.prompt },
-      { role: "model", text: chat.response }
-    ]) : [];
+    const previousChats = chatHistory
+      ? chatHistory.chats.flatMap((chat) => [
+          { role: "user", text: chat.prompt },
+          { role: "model", text: chat.response },
+        ])
+      : [];
 
     const response = await liProfileViewRun(prompt, previousChats);
 
@@ -352,10 +411,14 @@ const liprofileview = asynchandler(async (req, res) => {
       await newChatHistory.save();
     }
 
-    res.json(response);
+    res.json({
+      data: response,
+    });
   } catch (error) {
     console.log(error);
-    res.status(500).send('An error occurred while generating the response.');
+    res
+      .status(500)
+      .json({ message: `An error occurred while generating the response. ${error}` });
   }
 });
 

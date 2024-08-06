@@ -8,12 +8,12 @@ app.use(express.urlencoded({
     extended:true,
     limit:"20kb"
 }))
-app.use(express.static("Public"));
-const corsOptions = {
-  origin: 'http://localhost:5174',
-  credentials: true,
-};
-app.use(cors(corsOptions));
+app.use(
+  cors({
+      origin: process.env.LINK_ORIGIN,
+      credentials: true,
+  })
+)
 import dataroutes from './Routes/Data.routes.js'
 import userRoutes from './Routes/User.routes.js'
  app.use('/user',userRoutes)
