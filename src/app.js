@@ -10,7 +10,7 @@ app.use(express.urlencoded({
 }))
 app.use(
   cors({
-      origin: process.env.LINK_ORIGIN,
+      origin: '*',
       credentials: true,
   })
 )

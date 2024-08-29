@@ -2,19 +2,22 @@ import dotenv from "dotenv";
 
 import mongoose from 'mongoose'
 import { app } from "./app.js";
+import connectDB from "./DB/Dbconnection.js";
 dotenv.config();
 
 
 const mongo_uri = 'mongodb+srv://mradhruv460:quiz_dhruv@cluster0.8iwgdu0.mongodb.net/gemini_project'
-// const mongo_uri = 'mongodb+srv://gemini:123@cluster0.zlp0toa.mongodb.net/gemini'
-// everybodu add your port in your .env file 
+connectDB()
+    .then(() => {
+      app.listen(process.env.PORT ||1250,()=>{
+        console.log(`⚙️ Server is running at port : ${process.env.PORT}`);
+      })
+    })
+    .catch((e) => {
+        console.error(`Connection failed in main index ${e}`);
+    })
 
-
-mongoose.connect(mongo_uri, { useNewUrlParser: true, useUnifiedTopology: true })
-  .then(() => console.log('MongoDB connected'))
-  .catch((err) => console.log(err));
-
-app.listen(process.env.PORT,()=>{
+app.listen(process.env.PORT||2401,()=>{
 console.log(`⚙️ Server is running at ${process.env.PORT} `);
 })
 
