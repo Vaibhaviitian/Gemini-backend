@@ -1,6 +1,4 @@
 import dotenv from "dotenv";
-
-import mongoose from 'mongoose'
 import { app } from "./app.js";
 import connectDB from "./DB/Dbconnection.js";
 dotenv.config();
@@ -17,7 +15,7 @@ connectDB()
         console.error(`Connection failed in main index ${e}`);
     })
 
-app.listen(process.env.PORT||2401,()=>{
-console.log(`⚙️ Server is running at ${process.env.PORT} `);
-})
+// app.listen(process.env.PORT||2401,()=>{
+// console.log(`⚙️ Server is running at ${process.env.PORT} `);
+// })
 
