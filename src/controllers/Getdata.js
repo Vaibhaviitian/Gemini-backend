@@ -472,12 +472,8 @@ const imagetotext = asynchandler(async (req, res) => {
 
 const changetone = asynchandler(async (req, res) => {
   try {
-    const { data } = req.body;
-    if (!data) {
-      return res.status(500).json({
-        message: `Having some error ${error}`,
-      });
-    }
+    const { userId, prompt } = req.body;
+   
 
     const genAI = new GoogleGenerativeAI(process.env.API_KEY);
     const model = genAI.getGenerativeModel({
@@ -485,9 +481,6 @@ const changetone = asynchandler(async (req, res) => {
       systemInstruction:
         "Your task is to transform a given message into various tones based on user input. When a user provides a message and specifies a desired tone, such as 'angry,' 'smooth,' or 'merciful,' you should analyze the original message and adjust its tone accordingly. For an 'angry' tone, use strong and forceful language to convey frustration or urgency. For a 'smooth' tone, employ polite and reassuring language with a gentle flow. For a 'merciful' tone, incorporate compassionate and understanding language, focusing on empathy and forgiveness. Ensure that the modified message maintains its core meaning while aligning with the requested tone and provide the adapted message in your response.",
     });
-
-    const prompt = `${data}`;
-    console.log(prompt);
 
     const result = await model.generateContent(prompt);
     const response = await result.response;
